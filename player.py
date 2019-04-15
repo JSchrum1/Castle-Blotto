@@ -4,6 +4,8 @@ import head2head
  #  By Joe Schrum
  #  Email Joeschrum1@gmail.com for questions or comments
 
+#Add a player
+# format: addPlayer(playerList, ["Name",c1 troops, ... ,c10 troops, [group 1 ID,...,group n ID]])
 def addPlayer(playerList, infoReset=["NULL",0,0,0,0,0,0,0,0,0,0,[]]):
     info=infoReset.copy()
     if (info[0]=="NULL"):
@@ -30,6 +32,7 @@ def addPlayer(playerList, infoReset=["NULL",0,0,0,0,0,0,0,0,0,0,[]]):
     playerObject.append(player(info[0], info[1],info[2],info[3],info[4],info[5],info[6],info[7],info[8],info[9],info[10],info[11]))
     playerList.extend(makePlayerArray(playerObject))
 
+#delete a player given playerList and their playerID
 def deletePlayer(playerList, idNum=-1):
     if(idNum==-1):
         try:
@@ -40,6 +43,7 @@ def deletePlayer(playerList, idNum=-1):
     index=findpNum(playerList, idNum)
     del playerList[index]
 
+#find a player's index given their playerID
 def findpNum(gamesList, ID):
     x=0
     for player in gamesList:
@@ -49,11 +53,13 @@ def findpNum(gamesList, ID):
     print("Player ID Invalid")
     exit(0)
 
+#Prints a player's info given the player list and their id
 def printPlayer(playerList, idNum):
     index=findpNum(playerList, idNum)
     player=playerList[index]
     print("{:<20} ID: {:<5} {:^9} {:^9} {:^9} {:^9} {:^9} {:^9} {:^9} {:^9} {:^9} {:^10}".format(player[10], player[12],player[0],player[1],player[2],player[3],player[4],player[5],player[6],player[7],player[8],player[9]))
 
+#change a players name given the playerList and their id number
 def editName(playerList, idNum, name="NULL"):
     index=findpNum(playerList, idNum)
     if(name=="NULL"):
@@ -64,6 +70,7 @@ def editName(playerList, idNum, name="NULL"):
     print("Name change successful")
     printPlayer(playerList, idNum)
 
+#Change how many troops a player has on his or her castles given the list of players and the player's id
 def editCastles(playerList, idNum, troopsReset=[0,0,0,0,0,0,0,0,0,0]):
     troops=troopsReset.copy()
     index=findpNum(playerList, idNum)
@@ -88,6 +95,7 @@ def editCastles(playerList, idNum, troopsReset=[0,0,0,0,0,0,0,0,0,0]):
             print("Troop change successful.")
             printPlayer(playerList, idNum)
 
+#add player to a group given the list of players, their id number, and the list of groups
 def addGroup(playerList, idNum, groupList, groupID=-1):
     index=findpNum(playerList, idNum)
     if(groupID==-1):
@@ -104,6 +112,7 @@ def addGroup(playerList, idNum, groupList, groupID=-1):
         print("Player added successfully.")
         Groups.printGroup(playerList, groupID, groupList)
 
+#Remove the player from a group given the playerList and the playerID
 def removeGroup(playerList, idNum, groupID=-1):
     index=findpNum(playerList, idNum)
     if(groupID==-1):
@@ -122,6 +131,7 @@ def removeGroup(playerList, idNum, groupID=-1):
                 print("Player Successfully removed from group {}.".format(groupID))
                 return
 
+#Checks how many troops a player has in their castles
 def checkTroopCount(troopList):
     totalTroops=0
     for castle in range(0,10):
@@ -131,6 +141,7 @@ def checkTroopCount(troopList):
         return False
     return True
 
+#Prints the list of players and their info
 def printPlayerList(playerList):
     print("{:^20} {:^9} {:^9} {:^9} {:^9} {:^9} {:^9} {:^9} {:^9} {:^9} {:^9} {:^9}".format("Name","ID", "Castle 1","Castle 2","Castle 3","Castle 4","Castle 5", "Castle 6", "Castle 7", "Castle 8", "Castle 9", "Castle 10"))
     averages=[0,0,0,0,0,0,0,0,0,0]
@@ -158,13 +169,15 @@ def makePlayerArray(List):
 
 
 class player:
+    #Auto-assign player ID numbers
     IDnum=101
+    #Used to create a player object
     def __init__(self, name="Null", c1=0, c2=0, c3=0, c4=0, c5=0, c6=0, c7=0, c8=0, c9=0, c10=0, groups=[]):
         totalTroops=c1+c2+c3+c4+c5+c6+c7+c8+c9+c10
-        if(totalTroops>100):
+        if(totalTroops>100): #Makes sure player cant have more than 100 troops
             print("{} has too many troops! Failed to create player".format(name))
             return
-        elif(totalTroops<100):
+        elif(totalTroops<100): #allow player to have less than 100 troops but warn them they dont have 100
             print("\n{} only has {} troops!\n\n".format(name, totalTroops))
         self.name=name
         self.ID=self.IDnum

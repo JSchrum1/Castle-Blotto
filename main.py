@@ -3,12 +3,15 @@ import Groups
 import head2head
 import player
 
+# By Joe Schrum
+# Email Joeschrum1@gmail.com with questions or comments
+
+#calls function to create a new player
 def p(name="Null", c1=0, c2=0, c3=0, c4=0, c5=0, c6=0, c7=0, c8=0, c9=0, c10=0, groups=[]):
     return player.player(name,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,groups)
 
+# make a list of startplayers and print results and their 1v1 stats.
 def main():
-    pass
-
     playerList=makeList(starterPlayers())
     PrintRec(playerList)
     #printPlayers(playerList)
@@ -16,30 +19,41 @@ def main():
     printPlayer1v1(playerList, 119)
     #printAll1v1AVGs(playerList)
 
+    #These functions are abbreviations to call functions in other classes easier
+#print a list of players
 def printPlayers(playerList):
     player.printPlayerList(playerList)
 
+#Print results of the tournament
 def PrintRec(playerList):
     Castle.printRecord(playerList)
 
+#Turn the list of player onjects into a list of lists to be compatible with other code
 def makeList(List):
     return player.makePlayerArray(List)
 
+#Print the results of a certain player's head to head matches
 def h2h(list, ID):
     head2head.printH2H(list, ID)
 
+#Print the average stats of a certain player's head to head matches
 def printAVGplayer1v1(playerList, ID):
     head2head.printAVG1v1only(playerList, ID)
 
+#Print the average stats of all players' head to head matches
 def printAll1v1AVGs(playerList):
     head2head.printAllAVG1v1(playerList)
 
+#Print detailed info of every head to head match
 def printAll1v1(playerList):
     head2head.printAll1v1(playerList)
 
+#Print detailed info of all of one player's head to head matches
 def printPlayer1v1(playerList, ID):
     head2head.printAllplayer1v1(playerList, ID)
 
+#Initialize a list of players.
+#I have kept my tournament's players here for an example of how it should be formatted
 def starterPlayers():
     PL=[]
     # Name,                Castle #: 1   2   3   4   5   6   7   8   9  10,  groups

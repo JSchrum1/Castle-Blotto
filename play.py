@@ -3,6 +3,10 @@ import Castle
 import head2head
 import Groups
 
+# By Joe Schrum
+# Email JoeSchrum1@gmail.com with questions or comments
+
+#main function to allow for playing via terminal. Handles input and initialized a player list and greeting
 def main():
     playerList, groupList=initialize()
     sure="no"
@@ -13,12 +17,14 @@ def main():
         sure=input("Are you sure you would like to exit? [y/n]:").lower()
     print("Thank you for playing!")
 
+#print welcome message
 def printWelcome():
     print("Welcome to Castle Blotto!")
     print("This is a strategy based tournament style game.")
     print("Take your time before you answer and consider what you think your opponent will do.")
     print("Good luck!")
 
+#print Castle Blotto rules
 def printRules():
     print(
 """
@@ -32,6 +38,7 @@ Castle Blotto Rules:
 7.) Each player's entry will play every other player's entries.
 8.) The person with the most head to head wins is the overall winner.""")
 
+#print instructions for playing via terminal
 def printHelp():
     print(
 """
@@ -51,6 +58,7 @@ You may also use abbreviations for most commands.
 """
     )
 
+#process user input
 def processCommand(userInput, playerList, groupList):
     if(userInput == "add player" or userInput=="ap"):
         player.addPlayer(playerList)
@@ -76,6 +84,7 @@ def processCommand(userInput, playerList, groupList):
         print("Invalid command.")
     return input("Enter a command: ").lower()
 
+#show results for a given group
 def showGroupResults(playerList, groupList):
     try:
         groupNum=int(input("Enter group number: "))
@@ -92,6 +101,7 @@ def showGroupResults(playerList, groupList):
     if(details=="yes" or details =="y"):
         head2head.printAll1v1(group)
 
+#Proccesses user request to view match info
 def processPrintMatchInfo(playerList):
     userInput=input('Enter a playerID to see that player\'s stats or enter "All" to view all player stats: ').lower()
     if(userInput=="all" or userInput=="a"):
@@ -104,6 +114,7 @@ def processPrintMatchInfo(playerList):
         return
     head2head.printAllplayer1v1(playerList, ID)
 
+#processes user request to change player info
 def processChangePlayerInfo(playerList, groupList):
     try:
         idNum=int(input("Please enter the ID number of the player you would like to edit: "))
@@ -120,6 +131,7 @@ def processChangePlayerInfo(playerList, groupList):
     else:
         print("Invalid input.")
 
+#processes user request to edit groups
 def editGroups(playerList,groupList,  idNum):
     addOrRemove=input("Would you like to add this player to a group or remove this player from  group?: ").lower()
     if(addOrRemove=="add" or addOrRemove=="a"):
@@ -129,6 +141,7 @@ def editGroups(playerList,groupList,  idNum):
     else:
         print("Invalid input.")
 
+#initialized by printing welcome, rules, help, and returning an empty player list and group list
 def initialize():
     printWelcome()
     printRules()

@@ -1,6 +1,9 @@
 import Castle
 import player as playerClass
 
+# By Joe Schrum
+# Email JoeSchrum1@gmail.com with questions or comments
+
 #Print scores from each game for a particular player
 #Input: List, int (gamesList, number of chosen player)
 def head2heads(gamesList, pNum):
@@ -11,18 +14,19 @@ def head2heads(gamesList, pNum):
         Scores.append([p1Score, p2Score, entry[10]])
     return Scores, playerCastles[10]
 
+#Finds and returns stats for a certain 1v1 match given the 2 player lists
 def oneVSone(p1, p2):
-    r=[]
-    tLeft=[0,0,0,0,0,0,0,0,0,0,0,0]
-    tLostby=[0,0,0,0,0,0,0,0,0,0,0,0]
-    tUnused=[0,0,0,0,0,0,0,0,0,0,0,0]
-    troops=[0,0,0,0,0,0,0,0,0,0]
-    score=[[0,0]]
-    first=True
-    winner=False
-    cWon=0
-    cLost=0
-    cUnused=0
+    r=[] #win, loss, tie, or match never occurs for player 1 for each castle
+    tLeft=[0,0,0,0,0,0,0,0,0,0,0,0] #Troops player 1 won by
+    tLostby=[0,0,0,0,0,0,0,0,0,0,0,0] #Troops player 1 lost by
+    tUnused=[0,0,0,0,0,0,0,0,0,0,0,0] #Troops unused for player 1 (if castle battle never occurs)
+    troops=[0,0,0,0,0,0,0,0,0,0] # Number of troops player 1 has on each castle
+    score=[[0,0]] #Current score [player 1, player 2] after each castle
+    first=True #Used to ensure the score function doesn't try to access an invalid list element on the first iteration
+    winner=False #True if the castles no longer matter because a winner has already been chosen
+    cWon=0 #Number of castles won
+    cLost=0 #Number of castles lost
+    cUnused=0 #Number of castles where the battle doesn't occur
     for castle in range(10):
         troops[castle]=p1[castle]
         if not winner:
@@ -81,6 +85,7 @@ def oneVSone(p1, p2):
         tLeft[11]=0
     return r, tLeft, tLostby, tUnused, score, final
 
+#Print 1v1 match results given results from oneVSone function
 def printoneVSone(p1, p2):
     #r= List containing result of each match
     #tLeft= List containing Troops player1 won by at each castle won, tLeft[10] is total of 0-9
@@ -99,6 +104,7 @@ def printoneVSone(p1, p2):
     print("{:>20}: C1: {:<3}   C2: {:<3}   C3: {:<3}   C4: {:<3}   C5: {:<3}   C6: {:<3}   C7: {:<3}   C8: {:<3}   C9: {:<3}   C10: {:<3}   Total: {:<3}   Average: {:<3}\n".format("Troops Unused", tUnused[0],tUnused[1],tUnused[2],tUnused[3],tUnused[4],tUnused[5],tUnused[6],tUnused[7],tUnused[8],tUnused[9],tUnused[10], tUnused[11]))#troops unused
     return r, tLeft, tLostby, tUnused, score, final
 
+#Print average 1v1 stats for a certain player given the list of players and their playerID
 def printAVG1v1only(gList, p1ID):
     allInfo=[]
     gamesList=gList.copy()
@@ -111,6 +117,7 @@ def printAVG1v1only(gList, p1ID):
     troops=p1[0:10]
     printavg1v1(allInfo, name, troops)
 
+#Prints all player 1v1 info for a certain player given the player list and their player ID
 def printAllplayer1v1(gList, p1ID):
     allInfo=[]
     gamesList=gList.copy()
@@ -125,14 +132,17 @@ def printAllplayer1v1(gList, p1ID):
     troops=p1[0:10]
     printavg1v1(allInfo, name, troops)
 
+#Prints all 1v1 info for all players given the player list
 def printAll1v1(gamesList):
     for player in gamesList:
         printAllplayer1v1(gamesList, player[12])
 
+#Prints all average 1v1 info given the player list
 def printAllAVG1v1(gamesList):
     for player in gamesList:
         printAVG1v1only(gamesList, player[12])
 
+#Prints average 1v1 info for a certain player given their info, name, and troop distribution
 def printavg1v1(allInfo, name, troops):
     CWP, CLP, CTP, CUP, CAVGW, CAVGL, WOC, LOC, AVGCW, AVGCL, AVGWM, AVGLM, AVGOU, PO20=avg1v1(allInfo)
     print("\n{:>70}{:<}\n".format("Statistics for ",name))
@@ -155,20 +165,21 @@ def printavg1v1(allInfo, name, troops):
     print("{:>30}: {:^4}{:^4}{:^4}{:^4}{:^4}{:^4}{:^4}{:^4}{:^4}{:^4}".format("Games won by amount over 20",PO20[0],PO20[1],PO20[2],PO20[3],PO20[4],PO20[5],PO20[6],PO20[7],PO20[8],PO20[9]))
 
 #  info[x][0]=r  info[x][1]=tLeft  info[x][2]=tLostby  info[x][3]=tUnused  info[x][4]=score   info[x][5]=final
+# Finds average 1v1 info for a player given their match 1v1 info
 def avg1v1(info):
-    cWinPercent=[]
-    cLossPct=[]
-    cTiePct=[]
-    cUnusedPct=[]
-    cAvgWinBy=[]
-    cAvgLoseBy=[]
+    cWinPercent=[] #percent of times player won each castle
+    cLossPct=[] #percent of time player lost each castle
+    cTiePct=[] #percent of time player tied each castle
+    cUnusedPct=[] #percent of time castle was not played for a player
+    cAvgWinBy=[] #Average number of troops player won a castle by
+    cAvgLoseBy=[] #average number of troops player lost a castle by
     winsOnCastle=[0,0,0,0,0] #wins from each castle 6-10
-    LossOnCastle=[0,0,0,0,0]
+    LossOnCastle=[0,0,0,0,0] #losses on each castle from 6-10
     avgCVictory=-1 #average castle number you win on
-    avgCLoss=-1
-    avgWinMargin=-1 #Average Amount you win by
-    avgLossMargin=-1
-    avgOU=-1
+    avgCLoss=-1 #The average castle on which the player loses a match
+    avgWinMargin=-1 #Average Amount you win by (in points)
+    avgLossMargin=-1 #average amount you lose by (in points)
+    avgOU=-1 #average amount of points over or under your opponent for your matches
     pointsOver20=[0,0,0,0,0,0,0,0,0,0] #starting at 0 points over 20, how many wins were by each margin over 20
 
     matchCount=len(info)
@@ -249,16 +260,19 @@ def avg1v1(info):
             cAvgLoseBy.append(0)
     return cWinPercent, cLossPct, cTiePct, cUnusedPct, cAvgWinBy,cAvgLoseBy,winsOnCastle,LossOnCastle,avgCVictory,avgCLoss,avgWinMargin,avgLossMargin,avgOU,pointsOver20
 
+#print basic head to head info for a player given the list of players and their player ID
 def printAllplayerh2h(gList, ID):
     gamesList=gList.copy()
     printH2H(gamesList, ID)
     p1=playerClass.findpNum(gamesList, ID)
     printAll1v1(gamesList)
 
+#print basic head to head info for all players given the list of players
 def printAllh2h(gamesList):
     for player in gamesList:
         printAllplayerh2h(gamesList, player[12])
 
+#used to find basic info on 1v1 stats, which it returns to the function which called it
 def printH2H(gList, ID):
     gamesList=gList.copy()
     pNum=playerClass.findpNum(gamesList, ID)
